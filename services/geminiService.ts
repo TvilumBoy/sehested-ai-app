@@ -1,9 +1,18 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 
-// FIX: Aligned API client initialization with the coding guidelines.
-// Directly use `process.env.API_KEY` and remove unnecessary checks and fallbacks,
-// as the guidelines state to assume the API key is pre-configured and valid.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// The API key is injected by Vite's `define` feature in `vite.config.ts`.
+// It replaces `process.env.API_KEY` with the value of `GEMINI_API_KEY`
+// from your environment during the build process.
+const apiKey = process.env.API_KEY;
+
+// A runtime check to ensure the API key is available. If the environment
+// variable is not set during the build, Vite replaces it with `undefined`,
+// which JSON.stringify turns into the string "undefined".
+if (!apiKey || apiKey === "undefined") {
+  throw new Error("API key not found. Please ensure that the GEMINI_API_KEY environment variable is set correctly in Vercel and that the project has been redeployed.");
+}
+
+const ai = new GoogleGenAI({ apiKey });
 
 export function startChat(fileNames: string[], documentContent: string): Chat {
   const fileList = fileNames.length > 0 ? fileNames.join(', ') : 'No documents uploaded';
