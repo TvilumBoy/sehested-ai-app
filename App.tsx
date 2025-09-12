@@ -69,9 +69,10 @@ const App: React.FC = () => {
               }
           ]);
         } catch (err) {
-          console.error("Error parsing PDF files:", err);
-          setError("There was an error processing your documents. Please ensure they are valid PDFs and try again.");
-          setFiles([]);
+          console.error("Error processing files and starting chat:", err);
+          const errorMessage = err instanceof Error ? err.message : "An unknown error occurred while processing documents.";
+          setError(errorMessage);
+          setFiles([]); // Clear the invalid state.
         } finally {
           setIsParsing(false);
         }
