@@ -5,9 +5,10 @@ import { startChat } from './services/geminiService';
 import { extractTextFromPdf } from './utils/pdfUtils';
 import { FileUpload } from './components/FileUpload';
 import { ChatWindow } from './components/ChatWindow';
+import manifest from './metadata.json'; // Import metadata directly
 
 // Type definition for the structure of document sets in metadata.json
-type DocumentSets = Record<string, { name: string; files: string[] }>;
+type DocumentSets = Record<string, { files: string[] }>;
 
 const App: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -20,28 +21,23 @@ const App: React.FC = () => {
   const [isManifestLoading, setIsManifestLoading] = useState<boolean>(true);
 
 
-  // Effect to fetch the document manifest from metadata.json on startup
+  // Effect to load the document manifest from the imported JSON
   useEffect(() => {
-    const fetchManifest = async () => {
+    const loadManifest = () => {
       try {
-        const response = await fetch('/metadata.json');
-        if (!response.ok) {
-          throw new Error('Failed to load document configuration.');
+        if (!manifest.documentSets) {
+            throw new Error('Document configuration "documentSets" is missing from metadata.json.');
         }
-        const data = await response.json();
-        if (!data.documentSets) {
-            throw new Error('Document configuration is missing from metadata.json.');
-        }
-        setDocumentSets(data.documentSets);
+        setDocumentSets(manifest.documentSets as DocumentSets);
       } catch (err) {
-        console.error("Error fetching manifest:", err);
+        console.error("Error loading manifest:", err);
         const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
         setError(`Could not load document sets: ${errorMessage}`);
       } finally {
         setIsManifestLoading(false);
       }
     };
-    fetchManifest();
+    loadManifest();
   }, []);
 
   // Effect to process files whenever the 'files' state changes
