@@ -1,14 +1,17 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    // This makes the GEMINI_API_KEY environment variable, which is set in Vercel
-    // or a local .env file, available as process.env.API_KEY in the client-side code.
-    // Vite's build process replaces this with the actual value at build time.
-    // JSON.stringify is needed to correctly wrap the value as a string.
-    'process.env.API_KEY': JSON.stringify(process.env.GEMINI_API_KEY),
-  },
+export default defineConfig(({ mode }) => {
+  // Load env variables from .env files
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    plugins: [react()],
+    define: {
+      // Expose the API key to the client-side code.
+      // Vite will replace `process.env.API_KEY` with the value of `VITE_GEMINI_API_KEY`
+      'process.env.API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY)
+    }
+  };
 });
