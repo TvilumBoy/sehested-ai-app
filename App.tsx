@@ -5,7 +5,7 @@ import { startChat } from './services/geminiService';
 import { extractTextFromPdf } from './utils/pdfUtils';
 import { FileUpload } from './components/FileUpload';
 import { ChatWindow } from './components/ChatWindow';
-import manifest from './metadata.json'; // Use a direct relative path
+import manifest from './metadata.json';
 
 // Type definition for the structure of document sets in metadata.json
 type DocumentSets = Record<string, { files: string[] }>;
@@ -113,7 +113,7 @@ const App: React.FC = () => {
           const encodedPath = encodeURI(filePath);
           const response = await fetch(encodedPath);
           if (!response.ok) {
-            throw new Error(`Failed to load file: "${filePath}". The server returned a 404 (Not Found) error. This means the file path in 'metadata.json' does not match the actual file in the 'public' directory.\n\n**To fix this:**\n1. **Check the path:** Ensure the file exists at 'public${filePath}'.\n2. **Check for typos:** Spelling and capitalization must be identical.\n3. **Use simple names:** The best solution is to rename your files to use only lowercase letters and hyphens (e.g., 'my-doc.pdf'), and update 'metadata.json' to match.`);
+            throw new Error(`Failed to load file at path: "${filePath}". The server returned a 404 (Not Found) error.\n\n**CRITICAL FIX REQUIRED:**\nThis means the file does not exist at the expected location. Please check the following in your project:\n1. A folder named 'public' must exist at the root of your project.\n2. Inside 'public', there must be a folder named 'documents'.\n3. The file path defined in 'metadata.json' ('${filePath}') must EXACTLY match the folder structure and filename inside your 'public' directory.\n\nFor example, the file for this path must be located at: 'public${filePath}'`);
           }
           const blob = await response.blob();
           const fileName = filePath.split('/').pop() || 'document.pdf';
