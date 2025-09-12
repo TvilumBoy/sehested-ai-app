@@ -5,7 +5,7 @@ import { startChat } from './services/geminiService';
 import { extractTextFromPdf } from './utils/pdfUtils';
 import { FileUpload } from './components/FileUpload';
 import { ChatWindow } from './components/ChatWindow';
-import manifest from './metadata.json'; // Import metadata directly
+import manifest from './metadata.json'; // Use a direct relative path
 
 // Type definition for the structure of document sets in metadata.json
 type DocumentSets = Record<string, { files: string[] }>;
