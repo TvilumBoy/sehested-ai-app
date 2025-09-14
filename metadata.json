@@ -3,7 +3,7 @@
   "description": "An AI-powered application by Sehested AI where you can upload multiple PDF documents and engage in an expert conversation about their contents. Get insights, summaries, and answers quickly.",
   "requestFramePermissions": [],
   "documentSets": {
-    "Merudgifter voksne": {
+    "Merudgifter voksne - Gældende": {
       "files": [
         "/documents/merudgifter_galdende/01.pdf",
         "/documents/m1/02.pdf",
