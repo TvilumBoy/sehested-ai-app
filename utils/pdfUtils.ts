@@ -4,6 +4,7 @@ import * as pdfjsLib from 'pdfjs-dist';
 // The dynamic '?url' import is not compatible with all environments.
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://aistudiocdn.com/pdfjs-dist@5.4.296/build/pdf.worker.mjs`;
 
+
 /**
  * Extracts text content from a PDF file.
  * @param file The PDF file to process.
